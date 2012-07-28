@@ -1,9 +1,6 @@
 package ru.xPaw.NoWeather;
 
-import java.util.List;
-
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -22,13 +19,6 @@ public class EventListener implements Listener
 		this.plugin = plugin;
 		
 		plugin.getServer( ).getPluginManager( ).registerEvents( this, plugin );
-		
-		List<World> worlds = plugin.getServer( ).getWorlds( );
-		
-		for( World world : worlds )
-		{
-			worldLoaded( world );
-		}
 	}
 	
 	@EventHandler( priority = EventPriority.HIGHEST, ignoreCancelled = true )
@@ -74,41 +64,6 @@ public class EventListener implements Listener
 	@EventHandler( priority = EventPriority.MONITOR, ignoreCancelled = true )
 	public void onWorldLoad( WorldLoadEvent event )
 	{
-		worldLoaded( event.getWorld( ) );
-	}
-	
-	public void worldLoaded( World world )
-	{
-		String worldName = world.getName( );
-		
-		if( !plugin.config.contains( worldName ) )
-		{
-			plugin.getLogger( ).info( worldName + " - no configuration, generating defaults" );
-		}
-		
-		Boolean disWeather   = plugin.isNodeDisabled( "disable-weather", worldName );
-		Boolean disThunder   = plugin.isNodeDisabled( "disable-thunder", worldName );
-		Boolean disLightning = plugin.isNodeDisabled( "disable-lightning", worldName );
-		Boolean disIce       = plugin.isNodeDisabled( "disable-ice-accumulation", worldName );
-		Boolean disSnow      = plugin.isNodeDisabled( "disable-snow-accumulation", worldName );
-		
-		if( disWeather && world.hasStorm( ) )
-		{
-			world.setStorm( false );
-			plugin.getLogger( ).info( "Stopped storm in " + worldName );
-		}
-		
-		if( disThunder && world.isThundering( ) )
-		{
-			world.setThundering( false );
-			plugin.getLogger( ).info( "Stopped thunder in " + worldName );
-		}
-		
-		plugin.setConfigNode( "disable-weather", worldName, disWeather );
-		plugin.setConfigNode( "disable-thunder", worldName, disThunder );
-		plugin.setConfigNode( "disable-lightning", worldName, disLightning );
-		plugin.setConfigNode( "disable-ice-accumulation", worldName, disIce );
-		plugin.setConfigNode( "disable-snow-accumulation", worldName, disSnow );
-		plugin.saveConfig( );
+		plugin.worldLoaded( event.getWorld( ) );
 	}
 }
