@@ -13,18 +13,18 @@ public class Main extends JavaPlugin
 	public FileConfiguration config;
 	
 	@Override
-	public void onEnable( )
+	public void onEnable()
 	{
-		config = getConfig( );
+		config = getConfig();
 		
-		new EventListener( this );
+		new EventListener(this);
 		
 		// Load worlds
-		List<World> worlds = getServer( ).getWorlds( );
+		List<World> worlds = getServer().getWorlds();
 		
-		for( World world : worlds )
+		for(World world : worlds)
 		{
-			worldLoaded( world );
+			worldLoaded(world);
 		}
 		
 		// Metrics
@@ -43,43 +43,43 @@ public class Main extends JavaPlugin
 		return config.getBoolean( worldName + "." + name, true );
 	}
 	
-	public void setConfigNode( String name, String worldName, Boolean value )
+	public void setConfigNode(String name, String worldName, Boolean value)
 	{
-		config.set( worldName + "." + name, value );
+		config.set(worldName + "." + name, value);
 	}
 	
-	public void worldLoaded( World world )
+	public void worldLoaded(World world)
 	{
-		String worldName = world.getName( );
+		String worldName = world.getName();
 		
-		if( !config.contains( worldName ) )
+		if( !config.contains(worldName))
 		{
-			getLogger( ).info( worldName + " - no configuration, generating defaults" );
+			getLogger().info(worldName + " - no configuration, generating defaults");
 		}
 		
-		Boolean disWeather   = isNodeDisabled( "disable-weather", worldName );
-		Boolean disThunder   = isNodeDisabled( "disable-thunder", worldName );
-		Boolean disLightning = isNodeDisabled( "disable-lightning", worldName );
-		Boolean disIce       = isNodeDisabled( "disable-ice-accumulation", worldName );
-		Boolean disSnow      = isNodeDisabled( "disable-snow-accumulation", worldName );
+		Boolean disWeather   = isNodeDisabled("disable-weather", worldName);
+		Boolean disThunder   = isNodeDisabled("disable-thunder", worldName);
+		Boolean disLightning = isNodeDisabled("disable-lightning", worldName);
+		Boolean disIce       = isNodeDisabled("disable-ice-accumulation", worldName);
+		Boolean disSnow      = isNodeDisabled("disable-snow-accumulation", worldName);
 		
-		if( disWeather && world.hasStorm( ) )
+		if( disWeather && world.hasStorm())
 		{
-			world.setStorm( false );
-			getLogger( ).info( "Stopped storm in " + worldName );
+			world.setStorm(false);
+			getLogger( ).info("Stopped storm in " + worldName);
 		}
 		
-		if( disThunder && world.isThundering( ) )
+		if(disThunder && world.isThundering())
 		{
 			world.setThundering( false );
-			getLogger( ).info( "Stopped thunder in " + worldName );
+			getLogger().info("Stopped thunder in " + worldName);
 		}
 		
-		setConfigNode( "disable-weather", worldName, disWeather );
-		setConfigNode( "disable-thunder", worldName, disThunder );
-		setConfigNode( "disable-lightning", worldName, disLightning );
-		setConfigNode( "disable-ice-accumulation", worldName, disIce );
-		setConfigNode( "disable-snow-accumulation", worldName, disSnow );
-		saveConfig( );
+		setConfigNode("disable-weather", worldName, disWeather);
+		setConfigNode("disable-thunder", worldName, disThunder);
+		setConfigNode("disable-lightning", worldName, disLightning);
+		setConfigNode("disable-ice-accumulation", worldName, disIce);
+		setConfigNode("disable-snow-accumulation", worldName, disSnow);
+		saveConfig();
 	}
 }
